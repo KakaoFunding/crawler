@@ -29,7 +29,6 @@ def getProductInfo():
   # 쿼리문 작성
   # 브랜드 아이디만 빼오는 쿼리문
   # brand_Ids = ('12345', '12345') 이런식으로 데이터 뽑아져야됨
-
   # cur.execute("SELECT brandId FROM tablename")
   # brand_Ids = cur.fetchall()
 
@@ -54,7 +53,11 @@ def getProductInfo():
     product_urls = [link.get_attribute('href') for link in driver.find_elements(By.CSS_SELECTOR, 'a[href*="/product/"]')]
 
     # 상품 URL 리스트를 순회
+    item_cnt = 0
     for product_url in product_urls:
+        if(item_cnt == 20) : break
+        item_cnt += 1
+        
         driver.get(product_url)
         print(product_url)
         time.sleep(5)
