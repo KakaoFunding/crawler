@@ -9,16 +9,16 @@ from selenium.webdriver.common.by import By
 
 import pymysql
 
-# 데이터베이스 연결
-conn = pymysql.connect(host='127.0.0.1', user='root', password='0000', db='soloDB', charset='utf8')
-cur = conn.cursor()
+# # 데이터베이스 연결
+# conn = pymysql.connect(host='127.0.0.1', user='root', password='0000', db='soloDB', charset='utf8')
+# cur = conn.cursor()
 
 ##Chrome WebDriver 경로 설정
 webdriver_path = './chromedriver.exe'
 
 ##Selenium 브라우저 옵션 설정
 options = Options()
-options.headless = True  # 브라우저 창을 띄우지 않고 실행
+# options.headless = True  # 브라우저 창을 띄우지 않고 실행
 
 # Selenium WebDriver 설정
 service = Service(webdriver_path)
@@ -26,12 +26,15 @@ driver = webdriver.Chrome(service=service, options=options)
 
 
 def getProductInfo():
-
   # 쿼리문 작성
   # 브랜드 아이디만 빼오는 쿼리문
-  # brand_Ids = ()'12345', '12345') 이런식으로 데이터 뽑아져야됨
-  cur.execute("SELECT brandId FROM tablename")
-  brand_Ids = cur.fetchall()
+  # brand_Ids = ('12345', '12345') 이런식으로 데이터 뽑아져야됨
+
+  # cur.execute("SELECT brandId FROM tablename")
+  # brand_Ids = cur.fetchall()
+
+  # 임시 데이터
+  brand_Ids = (3324, 11876)
 
   for brand_Id in brand_Ids :
     url = f"https://gift.kakao.com/brand/{brand_Id}"
@@ -53,13 +56,13 @@ def getProductInfo():
     # 상품 URL 리스트를 순회
     for product_url in product_urls:
         driver.get(product_url)
-        time.sleep(1)
-
+        print(product_url)
+        time.sleep(5)
 
         # 쿼리문 작성
         # 예시
         print("상품 ID:", product_url.split('/product/')[1])
-        cur.execute("INSERT INTO tablename (컬럼이름) VLAUES (%s)", (product_url.split('/product/')[1]))
+        # cur.execute("INSERT INTO tablename (컬럼이름) VLAUES (%s)", (product_url.split('/product/')[1]))
 
         title = driver.find_element(By.CSS_SELECTOR, 'h2.tit_subject').text
         
@@ -73,6 +76,17 @@ def getProductInfo():
         for thumbnail in thumbnail_elements:
             print("썸네일 URL: " + thumbnail.get_attribute('src'))
 
+
+        # 수정중
+        product_imgs = driver.find_elements(By.CLASS_NAME, "wrap_editor")
+        product_imgs = product_imgs[0].find_elements(By.TAG_NAME,  'div')
+        product_imgs = product_imgs[0].find_elements(By.TAG_NAME,  'img')
+        
+        for product_img in product_imgs:
+            print(product_img.get_attribute('data-resize-src'))
+            print(product_img.get_attribute('data-img-order'))
+
+    
         # 옵션 버튼을 처리
         option_buttons = driver.find_elements(By.CSS_SELECTOR, 'button.btn_option')
         for index in range(len(option_buttons)):
@@ -101,7 +115,10 @@ def getProductInfo():
                 clickable_details[0].find_element(By.CLASS_NAME, 'inp_check').click()
                 time.sleep(0.1)
 
-  conn.commit()
-  conn.close()
+  # conn.commit()
+  # conn.close()
 
   driver.quit()
+
+
+getProductInfo()
