@@ -1,7 +1,7 @@
-from service.readCategoryData import getCategoryInfos
-from service.readBrandData import getBrandInfos
-from service.readProductdata import getProductInfo
-
+# from service.readCategoryData import getCategoryInfos
+# from service.readBrandData import getBrandInfos
+# from service.readProductdata import getProductInfo
+from service.readOptionData import getOptionInfos
 # 카테고리 정보
 # getCategoryInfos()
 
@@ -10,5 +10,8 @@ from service.readProductdata import getProductInfo
 # DB 구축 완료
 
 # # 상품 정보
-getProductInfo()
+# getProductInfo()
+
+# # 옵션 정보
+getOptionInfos()
 
